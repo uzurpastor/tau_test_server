@@ -10,8 +10,8 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 plugin :tmp_restart
 
 if ENV['RAILS_ENV'] == 'development'
-  localhost_key = "#{File.join('config', 'local-certs', 'localhost-key.pem')}" 
-  localhost_crt = "#{File.join('config', 'local-certs', 'localhost.pem')}"
+  localhost_key = "#{File.join('config', 'local-cert', 'localhost-key.pem')}" 
+  localhost_crt = "#{File.join('config', 'local-cert', 'localhost.pem')}"
 
   ssl_bind 'localhost', 3000, {
     key: localhost_key,

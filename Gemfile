@@ -9,10 +9,13 @@ gem "tzinfo-data"
 gem "bootsnap", require: false
 gem "rack-cors"
 
-
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "rspec-rails"
   gem "dotenv-rails"
   gem "faker"
+end
+
+group :production do
+  gem "rails_12factor"
 end

@@ -1,9 +1,21 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
-  allow do
-    origins "https://localhost:4000", "https://127.0.0.1:4000"
 
-    resource "https://127.0.0.1:3000",
-      headers: :any,
-      methods: [:get, :post]
-  end
+  case ENV.fetch("RAILS_ENV") 
+  when "development" then create_cors_headers_for origin_url:   "https://localhost:4000", 
+                                                  resource_url: "https://localhost:3000"
+  when "production" then  create_cors_headers_for origin_url:   "https://localhost:4000", 
+                                                  resource_url: "https://localhost:3000"
+  else
+    raise 'problems'
+  end    
+
 end
+  def create_cors_headers_for(origin_url:, resource_url:)
+    allow do
+        origins origin_url
+
+        resource resource_url,
+          headers: :any,
+          methods: [:get, :post]
+      end
+  end
