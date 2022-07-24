@@ -3,14 +3,17 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: project
-  password: <%= ENV.fetch("PSQL_PASSWORD") %>
 
 development:
   <<: *default
   database: project_development
+  password: <%= ENV.fetch("PSQL_PASSWORD") %>
+
 test:
   <<: *default
   database: project_test
+  password: <%= ENV.fetch("PSQL_PASSWORD") %>
+
 production:
   <<: *default
   database: project_production
