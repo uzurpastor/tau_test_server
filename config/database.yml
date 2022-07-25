@@ -7,12 +7,12 @@ default: &default
 development:
   <<: *default
   database: project_development
-  password: <%= ENV["PSQL_PASSWORD"] %>
+  password: <%= ENV["PROJECT_DATABASE_PASSWORD"] %>
 
 test:
   <<: *default
   database: project_test
-  password: <%= ENV["PSQL_PASSWORD"] %>
+  password: <%= ENV["PROJECT_DATABASE_PASSWORD"] %>
 
 production:
   <<: *default
