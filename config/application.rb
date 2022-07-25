@@ -20,7 +20,5 @@ module Project
 
     config.api_only = true
     config.force_ssl = true
-    # config.ssl_options =  { hsts: { preload: true, expires: 1.year, subdomains: true }, 
-    #                         redirect: { status: 307, port: 81 } }
   end
 end

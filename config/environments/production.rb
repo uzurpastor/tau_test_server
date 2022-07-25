@@ -13,6 +13,9 @@ Rails.application.configure do
   config.i18n.fallbacks                     = true
   config.active_support.report_deprecations = false
   config.log_formatter                      = ::Logger::Formatter.new
+  
+  config.require_master_key = true
+  config.secret_key_base = '<%= ENV["SECRET_KEY_BASE"] %>'
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
