@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :users, only: [:show, :index, :create]
+  resources :users, except: [ :destroy]
 end
