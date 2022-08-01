@@ -33,3 +33,4 @@
 /.env
 # SSL key and cert
 /config/local-cert/*
+/spec/examples.txt
