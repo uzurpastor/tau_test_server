@@ -1,4 +1,9 @@
 require 'rails_helper'
+require 'helper'
+
+RSpec.configure do |config|
+  config.include Helper::User
+end
 
 RSpec.describe UsersController, type: :request do
   let(:headers) { { 'HTTPS': 'on', 
@@ -25,12 +30,14 @@ RSpec.describe UsersController, type: :request do
           end
   end
   describe "POST /users" do
+    let(:user_json) do
+      { user: {  name: "Lexy",
+                 email: "lexy@mail.com",
+                 password: "password",
+                 password_confirmation: "password" } } 
+    end 
     it 'creates a valid user' do
-        data = { user: { name: "Lexy",
-                         email: "lexy@mail.com",
-                         password: "password",
-                         password_confirmation: "password" } }
-        post '/users', params: data, headers: headers
+        post '/users', params: user_json, headers: headers
 
         expect( response )
           .to have_http_status(:created)
@@ -42,10 +49,10 @@ RSpec.describe UsersController, type: :request do
           .to eq(3) 
           end
     it 'doesn\'t create a nonvalid user' do
-        data = { user: { name: "Lexy",
-                         email: "lexymail.com",
-                         password: "password" } }
-        post '/users', params: data, headers: headers
+        user_json[:user][:password_confirmation] = "anotherpass"
+        user_json[:user][:email] = "lexymail.com"
+
+        post '/users', params: user_json, headers: headers
 
         expect( response )
           .to have_http_status(:unprocessable_entity)
@@ -57,10 +64,8 @@ RSpec.describe UsersController, type: :request do
   end
   describe "GET /users/:id" do
     it 'showes a user' do
-        user = FactoryBot.create(:user, name: "Lexy",
-                                        email: "lexy@mail.com",
-                                        password: "password",
-                                        password_confirmation: "password" )
+        user = create_local_user
+      
         get "/users/#{user.id}", headers: headers
 
         expect( response )
@@ -73,14 +78,14 @@ RSpec.describe UsersController, type: :request do
   end
   describe "DELETE /users/:id" do
     it 'deletes a user' do
-        user = FactoryBot.create(:user, name: "Lexy",
-                                        email: "lexy@mail.com",
-                                        password: "password",
-                                        password_confirmation: "password" )
+        user = create_local_user
+        
         delete "/users/#{user.id}", headers: headers
 
         expect( response )
           .to have_http_status(:no_content)
+        expect( User.count )
+          .to eq(2) 
           end
   end
 end
