@@ -1,11 +1,12 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
   def index
-    @users = User.all
+    users = User.all
+    render json: UsersRepresenter.new(users).as_json
   end
 
   def show
-    @user = User.find(params[:id])
+    render json: UsersRepresenter.new(@user).as_json
   end
 
   def create

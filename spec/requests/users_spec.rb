@@ -23,8 +23,7 @@ RSpec.describe UsersController, type: :request do
     it 'returns all users' do
         get '/users', headers: headers 
 
-        expect( response )
-          .to have_http_status(:success)
+        custom_expect response, status: :success
         expect( JSON.parse(response.body).size )
           .to eq(2) 
           end
@@ -38,13 +37,9 @@ RSpec.describe UsersController, type: :request do
     end 
     it 'creates a valid user' do
         post '/users', params: user_json, headers: headers
-
-        expect( response )
-          .to have_http_status(:created)
-        expect( JSON.parse(response.body).keys )
-          .to include "name", "email"
-        expect( JSON.parse(response.body).keys )
-          .to_not include "password_digest", "is_author"
+        custom_expect response, status: :created,
+                          expected_keys: %w[ name email is_author ],
+                          unexpected_keys: %w[ password_digest ]
         expect( User.count )
           .to eq(3) 
           end
@@ -54,12 +49,10 @@ RSpec.describe UsersController, type: :request do
 
         post '/users', params: user_json, headers: headers
 
-        expect( response )
-          .to have_http_status(:unprocessable_entity)
-        expect( JSON.parse(response.body).keys )
-          .to include "password_confirmation", "email"
+        custom_expect response, status: :unprocessable_entity,
+                          expected_keys: %w[ password_confirmation email ]
         expect( User.count )
-          .to eq(2) 
+          .to eq(2)
           end
   end
   describe "GET /users/:id" do
@@ -67,13 +60,9 @@ RSpec.describe UsersController, type: :request do
         user = create_local_user
       
         get "/users/#{user.id}", headers: headers
-
-        expect( response )
-          .to have_http_status(:success)
-        expect( JSON.parse(response.body).keys )
-          .to include "name", "email"
-        expect( JSON.parse(response.body).keys )
-          .to_not include "password_digest", "is_author"
+        custom_expect response, status: :success,
+                          expected_keys: %w[ name email is_author ],
+                          unexpected_keys: %w[ password_digest ]
           end
   end
   describe "DELETE /users/:id" do
@@ -82,8 +71,7 @@ RSpec.describe UsersController, type: :request do
         
         delete "/users/#{user.id}", headers: headers
 
-        expect( response )
-          .to have_http_status(:no_content)
+        custom_expect response, status: :no_content
         expect( User.count )
           .to eq(2) 
           end
